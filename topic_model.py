@@ -58,7 +58,7 @@ print("training_data_bigrammed made")
 
 
 
-"""cleaning"""
+# cleaning
 tokenizer = RegexpTokenizer(r'\w+')
 stopwords = get_stop_words('en')
 stemmer = PorterStemmer()
@@ -119,17 +119,17 @@ print("corpus ready")
 ldamodel10 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 10, 
                                            id2word = txtbook_dictionary,
                                            passes = 5)
-ldamodel.save('ldamodel_output10')
+ldamodel10.save('ldamodel_output10')
 
 ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100, 
                                            id2word = txtbook_dictionary,
                                            passes = 5)
-ldamodel.save('ldamodel_output100')
+ldamode100l.save('ldamodel_output100')
 
 ldamodel1000 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 1000, 
                                            id2word = txtbook_dictionary,
                                            passes = 5)
-ldamodel.save('ldamodel_output1000')
+ldamodel1000.save('ldamodel_output1000')
 
 
 print("LDA MODEL READY")
