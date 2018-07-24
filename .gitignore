@@ -7,6 +7,8 @@
 *.pdf
 *.old
 *.txt
+*.pkl
+*.npy
 
 /__pycache__/*
 /.ipynb_checkpoints/
