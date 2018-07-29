@@ -18,14 +18,14 @@ outputDir = os.path.join(rootDir,"pickles")
 
 with open(os.path.join(outputDir,"journals.pkl"),"rb") as f:
     journals = pickle.load(f)
-    
+
 #unlisting journals
 journals_flat = [i for i in list(chain.from_iterable(journals))]  
-    
-    
+
+
 with open(os.path.join(outputDir,"nber_part1.pkl"),"rb") as f:
     nber_part1 = pickle.load(f)   
-    
+
 with open(os.path.join(outputDir,"textbooks.pkl"),"rb") as f:
     textbooks = pickle.load(f)
 
@@ -48,15 +48,11 @@ print("phrases made")
 bigrammed = Phraser(phrases)
 print("bigrams made")
 
-
 bigrammed = list(bigrammed[sentence_split])
 print("bigrams saved")
 
-
 training_data_bigrammed = [' '.join(i) for i in bigrammed]
 print("training_data_bigrammed made")
-
-
 
 # cleaning
 tokenizer = RegexpTokenizer(r'\w+')
@@ -99,10 +95,9 @@ for i in range(len(training_flat)):
     stemmed = [stemmer.stem(i) for i in stopped]
     
     cleaned_texts.append(stemmed)
-    
+
 print("cleaning done")
 
-    
 with open("cleaned_texts.pkl","wb") as f:
     pickle.dump(cleaned_texts,f)
 
@@ -124,7 +119,7 @@ ldamodel10.save('ldamodel_output10')
 ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100, 
                                            id2word = txtbook_dictionary,
                                            passes = 5)
-ldamode100l.save('ldamodel_output100')
+ldamodel100.save('ldamodel_output100')
 
 ldamodel1000 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 1000, 
                                            id2word = txtbook_dictionary,
