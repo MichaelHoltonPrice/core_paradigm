@@ -111,20 +111,20 @@ print("corpora made")
 corpus = [txtbook_dictionary.doc2bow(text) for text in cleaned_texts]
 print("corpus ready")
 #LDA model
-ldamodel10 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 10, 
-                                           id2word = txtbook_dictionary,
-                                           passes = 5)
-ldamodel10.save('ldamodel_output10')
+#ldamodel10 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 10, 
+#                                           id2word = txtbook_dictionary,
+#                                           passes = 5)
+#ldamodel10.save('ldamodel_output10')
 
 ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100, 
                                            id2word = txtbook_dictionary,
                                            passes = 5)
 ldamodel100.save('ldamodel_output100')
 
-ldamodel1000 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 1000, 
-                                           id2word = txtbook_dictionary,
-                                           passes = 5)
-ldamodel1000.save('ldamodel_output1000')
+#ldamodel1000 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 1000, 
+#                                           id2word = txtbook_dictionary,
+#                                           passes = 5)
+#ldamodel1000.save('ldamodel_output1000')
 
 
 print("LDA MODEL READY")

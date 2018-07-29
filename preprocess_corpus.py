@@ -3,9 +3,6 @@ import re
 import itertools
 from itertools import chain
 import pickle
-import lxml
-from lxml.html import fromstring
-from lxml.html import tostring
 import paradigm
 
 # print("done imports")
@@ -14,22 +11,34 @@ import paradigm
 
 # """Collecting .txt files to clean"""
 
+
+
 to_clean = []
 error_files = []
 homeDir = os.getenv("HOME")
 rootDir = os.path.join(homeDir,"core_paradigm")
 journalRootDir = os.path.join(rootDir,"journal_data")
 
-JEP = paradigm.preprocessFiles(os.path.join(journalRootDir,"JEP"))
-QJE = paradigm.preprocessFiles(os.path.join(journalRootDir,"QJE"))
-AER = paradigm.preprocessFiles(os.path.join(journalRootDir,"AER"))
-JPE = paradigm.preprocessFiles(os.path.join(journalRootDir,"JPE"))
-EJ = paradigm.preprocessFiles(os.path.join(journalRootDir,"EJ"))
+#ukFile = ""
+#usFile = ""
 
-textbooks = paradigm.preprocessFiles(os.path.join(rootDir,"textbooks_txt"))
+#cleaner = paradigm.CoreCleaner(rootDir,usFile,ukFile)
+cleaner = paradigm.CoreCleaner(rootDir)
 
-nber_part0 = paradigm.preprocessFiles(os.path.join(rootDir,"NBER_txt"))
-nber_part1 = paradigm.cleanNBER(nber_part0)
+#p = os.path.join(rootDir,"NBER_txt","w7104.txt")
+#t0 = cleaner.cleanTextFile(p,fixSpelling=False)
+#t1 = cleaner.cleanTextFile(p)
+
+JEP = cleaner.preprocessFiles(os.path.join(journalRootDir,"JEP"))
+QJE = cleaner.preprocessFiles(os.path.join(journalRootDir,"QJE"))
+AER = cleaner.preprocessFiles(os.path.join(journalRootDir,"AER"))
+JPE = cleaner.preprocessFiles(os.path.join(journalRootDir,"JPE"))
+EJ = cleaner.preprocessFiles(os.path.join(journalRootDir,"EJ"))
+
+textbooks = cleaner.preprocessFiles(os.path.join(rootDir,"textbooks_txt"))
+
+nber_part0 = cleaner.preprocessFiles(os.path.join(rootDir,"NBER_txt"))
+nber_part1 = cleaner.cleanNBER(nber_part0)
 
 # pickling files
 
