@@ -71,7 +71,7 @@ for i in range(len(training_data_bigrammed)):
         print(i)
     #tokenize document
     #lower_case = training_flat[i].lower()
-    tokens = tokenizer.tokenize(training_flat[i])
+    tokens = tokenizer.tokenize(training_data_bigrammed[i])
     
     
     #stopwords
