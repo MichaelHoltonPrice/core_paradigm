@@ -16,14 +16,17 @@ import paradigm
 to_clean = []
 error_files = []
 homeDir = os.getenv("HOME")
-rootDir = os.path.join(homeDir,"core_paradigm")
+rootDir = os.path.join(homeDir,"core_data")
 journalRootDir = os.path.join(rootDir,"journal_data")
 
 #ukFile = ""
 #usFile = ""
 
 #cleaner = paradigm.CoreCleaner(rootDir,usFile,ukFile)
-cleaner = paradigm.CoreCleaner(rootDir)
+ukFile = os.path.join(homeDir,"core_data","UK_words.dat")
+usFile = os.path.join(homeDir,"core_data","US_words.dat")
+cleaner = paradigm.CoreCleaner(rootDir,ukFile,usFile)
+
 
 #p = os.path.join(rootDir,"NBER_txt","w7104.txt")
 #t0 = cleaner.cleanTextFile(p,fixSpelling=False)

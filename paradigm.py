@@ -11,20 +11,18 @@ class CoreCleaner():
     # A class to do the cleaning for the Core Econ paradigm text analysis
     # project.
     
-    def __init__(self,rootDir,ukFile=None,usFile=None):
+    def __init__(self,rootDir,ukFile,usFile):
         self.rootDir = rootDir
-        if ukFile is not None:
-            with open(uk_dir, 'r') as f:    
-                self.UK = f.read().replace('\u2028',' ').replace('\xa0','').splitlines()
-                self.UK = self.UK[0].split()
+        with open(ukFile, 'r') as f:    
+            self.UK = f.read().replace('\u2028',' ').replace('\xa0','').splitlines()
+            self.UK = self.UK[0].split()
     
-        if usFile is not None:
-            with open(us_dir, 'r') as f:    
-                self.US = f.read().replace('\u2028',' ').replace('\xa0','').splitlines()
-                self.US = self.US[0].split()
+        with open(usFile, 'r') as f:    
+            self.US = f.read().replace('\u2028',' ').replace('\xa0','').splitlines()
+            self.US = self.US[0].split()
         self.spell = SpellChecker()
 
-    def cleanTextFile(self,textFilePath,regex=None,fixSpelling=True):
+    def cleanTextFile(self,textFilePath,regex=None,fixMistakes=True):
         print("Cleaning " + textFilePath)
         if regex is None:
             regex = re.compile(r'([^a-z\- ])|((^| ). )')
@@ -36,25 +34,36 @@ class CoreCleaner():
         output = fromstring(output).text_content() #removing weird html stuff
         output = regex.sub('',output)
         output = regex.sub('',output)
-        tok = output.split() # tokenize
-        if fixSpelling:
-            # Search for merged words (lacking space between them due to OCR)
-            badWords = self.spell.unknown(tok)
-            for bad in badWords:
-                fix = self.checkForMissingSpace(bad)
-                # Remove the word
-                ind = [i for i,x in enumerate(tok) if x==bad]
-                while len(ind) is not 0:
-                    ind = ind[0]
-                    del tok[ind] # remove the value
-                    if fix is not None:
-                        # If a fix was found, add the fix
-                        w1,w2 = fix.split()
-                        tok.insert(ind,w1)
-                        tok.insert(ind+1,w2)
-                    ind = [i for i,x in enumerate(tok) if x==bad]
-            output = ' '.join(str(x) for x in tok)
+        if fixMistakes:
+            output = self.fixMistakes(output)
+        output = self.standardizeSpelling(output)
         return output
+
+    def fixMistakes(self,text):
+        # Fix mistakes, such as missing spaces between and mis-spellings
+        # text is an input string of words
+        tok = text.split() # tokenize the text into individual words
+
+        # (1) Search for merged words (lacking space between them due to OCR)
+        badWords = self.spell.unknown(tok)
+        for bad in badWords:
+            fix = self.checkForMissingSpace(bad)
+            ind = [i for i,x in enumerate(tok) if x==bad]
+            while len(ind) is not 0:
+                ind = ind[0]
+                del tok[ind] # remove the value
+                if fix is not None:
+                    # If a fix was found, apply it
+                    w1,w2 = fix.split()
+                    tok.insert(ind,w1)
+                    tok.insert(ind+1,w2)
+                ind = [i for i,x in enumerate(tok) if x==bad]
+
+        # (2) Search for word-parts separated by one hyphen (almost certainly
+        #     words spilling over two lines in the original PDF
+        # [Not implementing this, at least for now]
+        output = ' '.join(str(x) for x in tok)
+        return(output)
 
     def preprocessFiles(self,targetDir):
         text = []
@@ -64,7 +73,8 @@ class CoreCleaner():
                 if f.endswith('.txt'):
                     try:
                         path = os.path.join(dirname,f)
-                        text.append(self.cleanTextFile(path,fixSpelling=False))
+                        text.append(self.cleanTextFile(path,fixMistakes=False))
+                        #text.append(self.cleanTextFile(path))
                     except:
                         print(path)
         return text
@@ -80,6 +90,14 @@ class CoreCleaner():
                 problem.append(i)
         return(textList)
 
+    def standardizeSpelling(self,text):
+        tok = text.split()
+        for i,usWord in enumerate(self.US):
+            if usWord in tok:
+                tok = [self.UK[i] if w==usWord else w for w in tok]
+        output = ' '.join(str(x) for x in tok)
+        return(output)
+            
     def checkForMissingSpace(self,word):
         # For the input, misspelled word iterate over locations where a space could
         # go to identify merged words. The first successful candidate is returned.
