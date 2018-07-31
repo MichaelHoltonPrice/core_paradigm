@@ -66,7 +66,7 @@ tokenizer = RegexpTokenizer(r'\w+')
 stemmer = PorterStemmer()
 cleaned_texts = []
 
-for i in range(len(training_flat)):
+for i in range(len(training_data_bigrammed)):
     if i%1000 == 0:
         print(i)
     #tokenize document
