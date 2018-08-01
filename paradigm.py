@@ -25,7 +25,7 @@ class CoreCleaner():
     def cleanTextFile(self,textFilePath,regex=None,fixMistakes=True):
         print("Cleaning " + textFilePath)
         if regex is None:
-            regex = re.compile(r'([^a-z\- ])|((^| ). )')
+            regex = re.compile(r'([^a-z\- ])|((^| ).( |$))')
 
         output = [line.strip() for line in open(textFilePath,"r")] 
         output = [[word.lower() for word in text.split()] for text in output]

@@ -36,24 +36,7 @@ print("training data appended")
 training_flat = [i for i in list(chain.from_iterable(training_data))]  
 print("training data flattened")
 
-#bigramming
 
-sentence_split = [i.split(" ") for i in training_flat]
-print("sentence split")
-
-phrases = Phrases(sentence_split)
-
-print("phrases made")
-
-# Switch ordering of stemming and bi-gramming
-bigrammed = Phraser(phrases)
-print("bigrams made")
-
-bigrammed = list(bigrammed[sentence_split])
-print("bigrams saved")
-
-training_data_bigrammed = [' '.join(i) for i in bigrammed]
-print("training_data_bigrammed made")
 
 #loading stopwords
 with open(os.path.join(rootDir,"stopwords.dat"),"r") as f:
@@ -66,12 +49,12 @@ tokenizer = RegexpTokenizer(r'\w+')
 stemmer = PorterStemmer()
 cleaned_texts = []
 
-for i in range(len(training_data_bigrammed)):
+for i in range(len(training_flat)):
     if i%1000 == 0:
         print(i)
     #tokenize document
     #lower_case = training_flat[i].lower()
-    tokens = tokenizer.tokenize(training_data_bigrammed[i])
+    tokens = tokenizer.tokenize(training_flat[i])
     
     
     #stopwords
@@ -81,21 +64,50 @@ for i in range(len(training_data_bigrammed)):
     stemmed = [stemmer.stem(i) for i in stopped]
     
     cleaned_texts.append(stemmed)
-ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100,id2word = txtbook_dictionary,passes = 5)
 
 print("cleaning done")
 
-with open("cleaned_texts.pkl","wb") as f:
-    pickle.dump(cleaned_texts,f)
+
+#bigramming 
+
+cleaned_sent = [' '.join(i) for i in cleaned_texts]
+#bigramming
+
+sentence_split = [i.split(" ") for i in cleaned_sent]
+print("sentence split")
+
+phrases = Phrases(sentence_split)
+
+print("phrases made")
+
+bigrammed = Phraser(phrases)
+print("bigrams made")
+
+bigrammed = list(bigrammed[sentence_split])
+print("bigrams saved")
+
+training_data_bigrammed = [' '.join(i) for i in bigrammed if len(i) > 1]
+print("training_data_bigrammed made")
+
+
+with open(os.path.join(outputDir,"training_data_final.pkl"),"wb") as f:
+    pickle.dump(training_data_bigrammed,f)
 
 print("pickled")  
 
+
+#tokenizing
+training_data_final = [tokenizer.tokenize(i) for i in training_data_bigrammed]
+
 #make it into a dictionary
 
-txtbook_dictionary = corpora.Dictionary(cleaned_texts)
+dictionary = corpora.Dictionary(training_data_final)
 print("corpora made")
+
+dictionary.filter_extremes(no_below = 0.01*len(training_data_final))
+
 #creating a document-term matrix
-corpus = [txtbook_dictionary.doc2bow(text) for text in cleaned_texts]
+corpus = [dictionary.doc2bow(text) for text in training_data_final]
 print("corpus ready")
 #LDA model
 #ldamodel10 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 10, 
@@ -106,7 +118,7 @@ print("corpus ready")
 
 #ldamodel100 = gensim.models.ldamulticore.LdaMulticore(corpus,num_topics = 100,id2word = txtbook_dictionary,passes = 5)
 
-ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100,id2word = txtbook_dictionary,passes = 5)
+ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100,id2word = dictionary ,passes = 5)
 ldamodel100.save('ldamodel_output100')
 
 #ldamodel1000 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 1000, 
