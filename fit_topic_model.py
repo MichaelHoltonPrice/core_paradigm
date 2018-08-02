@@ -119,7 +119,7 @@ print("corpus ready")
 #ldamodel100 = gensim.models.ldamulticore.LdaMulticore(corpus,num_topics = 100,id2word = txtbook_dictionary,passes = 5)
 
 ldamodel100 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 100,id2word = dictionary ,passes = 5)
-ldamodel100.save('ldamodel_output100')
+ldamodel100.save(os.path.join(rootDir,'lda_output/ldamodel_output100'))
 
 #ldamodel1000 = gensim.models.ldamodel.LdaModel(corpus, num_topics = 1000, 
 #                                           id2word = txtbook_dictionary,
