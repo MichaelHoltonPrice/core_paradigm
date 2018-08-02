@@ -90,7 +90,7 @@ training_data_bigrammed = [' '.join(i) for i in bigrammed if len(i) > 1]
 print("training_data_bigrammed made")
 
 
-with open(os.path.join(outputDir,"training_data_final.pkl"),"wb") as f:
+with open(os.path.join(outputDir,"training_data_bigrammed.pkl"),"wb") as f:
     pickle.dump(training_data_bigrammed,f)
 
 print("pickled")  
