@@ -18,6 +18,7 @@ error_files = []
 homeDir = os.getenv("HOME")
 rootDir = os.path.join(homeDir,"core_data")
 journalRootDir = os.path.join(rootDir,"journal_data")
+outputDir = os.path.join(rootDir,"pickles")
 
 #ukFile = ""
 #usFile = ""
@@ -39,6 +40,8 @@ JPE = cleaner.preprocessFiles(os.path.join(journalRootDir,"JPE"))
 EJ = cleaner.preprocessFiles(os.path.join(journalRootDir,"EJ"))
 
 textbooks = cleaner.preprocessFiles(os.path.join(rootDir,"textbooks_txt"))
+articles = cleaner.preprocessFiles(os.path.join(rootDir,"articles"))
+core_chapters = cleaner.preprocessFiles(os.path.join(rootDir,"core_chapters"))
 
 nber_part0 = cleaner.preprocessFiles(os.path.join(rootDir,"NBER_txt"))
 nber_part1 = cleaner.cleanNBER(nber_part0)
@@ -46,16 +49,41 @@ nber_part1 = cleaner.cleanNBER(nber_part0)
 # pickling files
 
 journals = []
+#journals_sand = []
+#journals_sand.extend((JEP,articles))
 journals.extend((JEP,QJE,AER,JPE,EJ))
 
 #for home computer:
 
-outputDir = os.path.join(rootDir,"pickles")
-with open(os.path.join(outputDir,"textbooks.pkl"),"wb") as f:
-    pickle.dump(textbooks,f)
+if len(textbooks) == 13:
+    with open(os.path.join(outputDir,"textbooks.pkl"),"wb") as f:
+        pickle.dump(textbooks,f)
+else:
+    with open(os.path.join(outputDir,"textbooks.pkl"),"rb") as f:
+        textbooks = pickle.load(f)
 
+if len(articles) == 11:
+    with open(os.path.join(outputDir,"articles.pkl"),"wb") as f:
+        pickle.dump(articles,f)
+else:
+    with open(os.path.join(outputDir,"articles.pkl"),"rb") as f:
+        articles = pickle.load(f)
+
+if len(core_chapters) == 22:
+    with open(os.path.join(outputDir,"core_chapters.pkl"),"wb") as f:
+        pickle.dump(core_chapters,f)
+
+else:
+    with open(os.path.join(outputDir,"core_chapters.pkl"),"rb") as f:
+        core_chapters = pickle.load(f)
+    
+    
 with open(os.path.join(outputDir,"nber_part1.pkl"),"wb") as f:
     pickle.dump(nber_part1,f)
 
 with open(os.path.join(outputDir,"journals.pkl"),"wb") as f:
     pickle.dump(journals,f)
+
+
+#with open(os.path.join(outputDir,"journals_sand.pkl"),"wb") as f:
+#    pickle.dump(journals_sand,f)

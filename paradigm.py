@@ -5,7 +5,7 @@ import lxml
 from lxml.html import fromstring
 from lxml.html import tostring
 import unicodedata
-from spellchecker import SpellChecker
+#from spellchecker import SpellChecker
 
 class CoreCleaner():
     # A class to do the cleaning for the Core Econ paradigm text analysis
@@ -20,7 +20,7 @@ class CoreCleaner():
         with open(usFile, 'r') as f:    
             self.US = f.read().replace('\u2028',' ').replace('\xa0','').splitlines()
             self.US = self.US[0].split()
-        self.spell = SpellChecker()
+        #self.spell = SpellChecker()
 
     def cleanTextFile(self,textFilePath,regex=None,fixMistakes=True):
         print("Cleaning " + textFilePath)
@@ -73,7 +73,7 @@ class CoreCleaner():
                 if f.endswith('.txt'):
                     try:
                         path = os.path.join(dirname,f)
-                        text.append(self.cleanTextFile(path,fixMistakes=False))
+                        text.append((path,self.cleanTextFile(path,fixMistakes=False)))
                         #text.append(self.cleanTextFile(path))
                     except:
                         print(path)

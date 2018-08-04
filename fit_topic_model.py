@@ -19,9 +19,11 @@ outputDir = os.path.join(rootDir,"pickles")
 with open(os.path.join(outputDir,"journals.pkl"),"rb") as f:
     journals = pickle.load(f)
 
+#with open(os.path.join(outputDir,"journals_sand.pkl"),"rb") as f:
+   # journals_sand = pickle.load(f)
 #unlisting journals
 journals_flat = [i for i in list(chain.from_iterable(journals))]  
-
+#j_sand_flat = [i for i in list(chain.from_iterable(journals_sand))]
 
 with open(os.path.join(outputDir,"nber_part1.pkl"),"rb") as f:
     nber_part1 = pickle.load(f)   
@@ -30,12 +32,17 @@ with open(os.path.join(outputDir,"textbooks.pkl"),"rb") as f:
     textbooks = pickle.load(f)
 
 training_data = []
+#training_data_sand = []
+#training_data_sand.extend((j_sand_flat,textbooks))
+#tr_s_flat = [i for i in list(chain.from_iterable(training_data_sand))]
 training_data.extend((journals_flat,nber_part1,textbooks))
 print("training data appended")
 
 training_flat = [i for i in list(chain.from_iterable(training_data))]  
 print("training data flattened")
 
+paths = [i[0] for i in training_flat]
+training_texts = [i[1] for i in training_flat]
 
 
 #loading stopwords
@@ -49,12 +56,12 @@ tokenizer = RegexpTokenizer(r'\w+')
 stemmer = PorterStemmer()
 cleaned_texts = []
 
-for i in range(len(training_flat)):
+for i in range(len(training_texts)):
     if i%1000 == 0:
         print(i)
     #tokenize document
     #lower_case = training_flat[i].lower()
-    tokens = tokenizer.tokenize(training_flat[i])
+    tokens = tokenizer.tokenize(training_texts[i])
     
     
     #stopwords
@@ -95,6 +102,9 @@ with open(os.path.join(outputDir,"training_data_bigrammed.pkl"),"wb") as f:
 
 print("pickled")  
 
+with open(os.path.join(outputDir,"paths_to_data.pkl"),"wb") as f:
+    pickle.dump(paths,f)
+
 
 #tokenizing
 training_data_final = [tokenizer.tokenize(i) for i in training_data_bigrammed]
@@ -129,7 +139,7 @@ ldamodel100.save(os.path.join(rootDir,'lda_output/ldamodel_output100'))
 
 print("LDA MODEL READY")
 #to get results 
-#ldamodel.print_topics(num_topics=10, num_words=10)
+#ldamodel100.print_topics(num_topics=10, num_words=10)
 
 
 
