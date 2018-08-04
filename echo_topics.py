@@ -17,6 +17,7 @@ import gensim
 from gensim import corpora,models
 from gensim.models import Phrases
 from gensim.models.phrases import Phraser
+import math
 
 homeDir = os.getenv("HOME")
 
@@ -26,6 +27,8 @@ rootDir = os.path.join(homeDir,"core_data")
 model =  models.LdaModel.load(os.path.join(rootDir,'lda_output/ldamodel_output100'))
 
 topics100 =  model.print_topics(num_topics=100, num_words=10)
+
+
 
 
 for i,j in enumerate(topics100):
