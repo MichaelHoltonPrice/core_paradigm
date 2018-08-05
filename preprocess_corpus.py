@@ -55,28 +55,14 @@ journals.extend((JEP,QJE,AER,JPE,EJ))
 
 #for home computer:
 
-if len(textbooks) == 13:
-    with open(os.path.join(outputDir,"textbooks.pkl"),"wb") as f:
-        pickle.dump(textbooks,f)
-else:
-    with open(os.path.join(outputDir,"textbooks.pkl"),"rb") as f:
-        textbooks = pickle.load(f)
+with open(os.path.join(outputDir,"textbooks.pkl"),"wb") as f:
+    pickle.dump(textbooks,f)
 
-if len(articles) == 11:
-    with open(os.path.join(outputDir,"articles.pkl"),"wb") as f:
-        pickle.dump(articles,f)
-else:
-    with open(os.path.join(outputDir,"articles.pkl"),"rb") as f:
-        articles = pickle.load(f)
+with open(os.path.join(outputDir,"articles.pkl"),"wb") as f:
+    pickle.dump(articles,f)
 
-if len(core_chapters) == 22:
-    with open(os.path.join(outputDir,"core_chapters.pkl"),"wb") as f:
-        pickle.dump(core_chapters,f)
-
-else:
-    with open(os.path.join(outputDir,"core_chapters.pkl"),"rb") as f:
-        core_chapters = pickle.load(f)
-    
+with open(os.path.join(outputDir,"core_chapters.pkl"),"wb") as f:
+    pickle.dump(core_chapters,f)
     
 with open(os.path.join(outputDir,"nber_part1.pkl"),"wb") as f:
     pickle.dump(nber_part1,f)
